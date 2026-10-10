@@ -17,6 +17,14 @@ interface Profile {
   age?: number
   /** Which image set to use once themed art exists; "surprise" mixes both. */
   theme?: ImageTheme
+  /**
+   * How many of the Space Mission's 7 rocket pieces have been earned
+   * so far (0-7). Placeholder mechanic: a session with at least 10/15
+   * correct adds one piece. Will need a per-mission shape once a
+   * second mission exists; one flat counter is enough while there's
+   * only Space Mission.
+   */
+  missionPieces?: number
 }
 
 interface MathAppDB extends DBSchema {

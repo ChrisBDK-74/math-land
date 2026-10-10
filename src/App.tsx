@@ -75,6 +75,12 @@ function App() {
     setStage('main')
   }
 
+  async function handlePieceEarned(newCount: number) {
+    if (!profile) return
+    const updated = await updateProfile({ ...profile, missionPieces: newCount })
+    setProfile(updated)
+  }
+
   if (stage === 'landing') {
     return (
       <div className="page-backdrop">
@@ -146,7 +152,13 @@ function App() {
         </nav>
         <main className="app-main">
           {view === 'practice' && (
-            <PracticeScreen profileId={profile.id} profileName={profile.name} profileAge={profile.age} />
+            <PracticeScreen
+              profileId={profile.id}
+              profileName={profile.name}
+              profileAge={profile.age}
+              missionPieces={profile.missionPieces ?? 0}
+              onPieceEarned={handlePieceEarned}
+            />
           )}
           {view === 'tables' && <TableMatchScreen />}
           {view === 'resources' && <ResourceScreen />}

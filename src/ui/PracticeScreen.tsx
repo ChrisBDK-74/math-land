@@ -8,13 +8,26 @@ import { getMasteryRecords, putMasteryRecord, putSession } from '../storage/db'
 import type { MasteryRecord, Operation, SessionAnswer, SessionRecord, StageConfig } from '../engine/types'
 import { opClassName } from './opColor'
 import { createId } from '../utils/uuid'
+import { MissionProgress } from './MissionProgress'
 
 const factIndex = buildFactIndex(factSets)
+
+// Space Mission placeholder rules: the rocket has 7 pieces, and a
+// session needs at least 10 of 15 correct to earn the next one. Using
+// a ratio rather than a hard "15" keeps this working even though
+// masteryConfig.sessionLength is currently 12, not 15 — worth
+// reconciling with Christian once the mission's actual session length
+// is settled; for now 10/15 ≈ 67% is applied to whatever the real
+// session length is.
+const MISSION_PIECE_COUNT = 7
+const MISSION_PASS_RATIO = 10 / 15
 
 interface Props {
   profileId: string
   profileName: string
   profileAge?: number
+  missionPieces: number
+  onPieceEarned: (newCount: number) => void
 }
 
 type Phase = 'loading' | 'question' | 'feedback' | 'done' | 'locked'
@@ -27,7 +40,13 @@ const OP_FILTERS: { key: OpFilter; label: string; className: string }[] = [
   { key: 'mix', label: 'Mix', className: 'op-mix' },
 ]
 
-export function PracticeScreen({ profileId, profileName, profileAge }: Props) {
+export function PracticeScreen({
+  profileId,
+  profileName,
+  profileAge,
+  missionPieces,
+  onPieceEarned,
+}: Props) {
   // The live mastery map lives in a ref, not state: it's written
   // synchronously after every answer, and it must NOT be a dependency
   // of the queue-building effect below — if it were, scoring an answer
@@ -253,6 +272,12 @@ export function PracticeScreen({ profileId, profileName, profileAge }: Props) {
         answers: answersRef.current,
       }
       await putSession(session)
+
+      const ratio = queue.length > 0 ? sessionCorrectCount / queue.length : 0
+      if (ratio >= MISSION_PASS_RATIO - 1e-9 && missionPieces < MISSION_PIECE_COUNT) {
+        onPieceEarned(missionPieces + 1)
+      }
+
       setPhase('done')
     } else {
       setQueueIndex((i) => i + 1)
@@ -261,52 +286,55 @@ export function PracticeScreen({ profileId, profileName, profileAge }: Props) {
   }
 
   return (
-    <div className="screen-centered">
-      {opSubMenu}
-      <p className="stage-label">{sessionLabel}</p>
-      {/* data-records-version forces nothing visually; it just documents that this
-          subtree is meant to re-render whenever a mastery record changes. */}
-      <div
-        className={`question-card ${opClassName(currentQuestion.op)}`}
-        data-records-version={recordsVersion}
-      >
-        <div className="prompt">
-          {currentQuestion.prompt} = ?
-        </div>
-        {phase === 'question' && (
-          <form
-            onSubmit={(e) => {
-              e.preventDefault()
-              handleSubmit()
-            }}
-          >
-            <input
-              ref={inputRef}
-              type="number"
-              inputMode="numeric"
-              value={answerInput}
-              onChange={(e) => setAnswerInput(e.target.value)}
-              className="answer-input"
-            />
-            <button type="submit" className="primary-button">
-              Check
-            </button>
-          </form>
-        )}
-        {phase === 'feedback' && (
-          <div>
-            <p className={lastCorrect ? 'feedback-correct' : 'feedback-incorrect'}>
-              {lastCorrect ? 'Correct!' : `Not quite — it's ${currentQuestion.answer}`}
-            </p>
-            <button className="primary-button" onClick={handleNext}>
-              Next
-            </button>
+    <div className="practice-layout">
+      <div className="screen-centered">
+        {opSubMenu}
+        <p className="stage-label">{sessionLabel}</p>
+        {/* data-records-version forces nothing visually; it just documents that this
+            subtree is meant to re-render whenever a mastery record changes. */}
+        <div
+          className={`question-card ${opClassName(currentQuestion.op)}`}
+          data-records-version={recordsVersion}
+        >
+          <div className="prompt">
+            {currentQuestion.prompt} = ?
           </div>
-        )}
+          {phase === 'question' && (
+            <form
+              onSubmit={(e) => {
+                e.preventDefault()
+                handleSubmit()
+              }}
+            >
+              <input
+                ref={inputRef}
+                type="number"
+                inputMode="numeric"
+                value={answerInput}
+                onChange={(e) => setAnswerInput(e.target.value)}
+                className="answer-input"
+              />
+              <button type="submit" className="primary-button">
+                Check
+              </button>
+            </form>
+          )}
+          {phase === 'feedback' && (
+            <div>
+              <p className={lastCorrect ? 'feedback-correct' : 'feedback-incorrect'}>
+                {lastCorrect ? 'Correct!' : `Not quite — it's ${currentQuestion.answer}`}
+              </p>
+              <button className="primary-button" onClick={handleNext}>
+                Next
+              </button>
+            </div>
+          )}
+        </div>
+        <p className="progress-label">
+          Question {queueIndex + 1} of {queue.length}
+        </p>
       </div>
-      <p className="progress-label">
-        Question {queueIndex + 1} of {queue.length}
-      </p>
+      <MissionProgress filled={missionPieces} total={MISSION_PIECE_COUNT} />
     </div>
   )
 }
