@@ -1,0 +1,661 @@
+:root {
+  /* Warm, cream-based palette. The three operation colors are the one
+     real accent system in the app — everything else stays quiet so
+     those colors keep their meaning (which operation a kid is doing)
+     instead of competing with decorative color elsewhere. */
+  --cream: #fbf4e3;
+  --cream-deep: #f1e4c4;
+  --cream-ink: #6b5e44;
+  --ink: #332b22;
+  --paper: #ffffff;
+  --paper-wash: #fcfbf8;
+  --border-soft: #e7dcc3;
+
+  --add-bg: #cfebf7;
+  --add-bg-deep: #aedcef;
+  --add-ink: #1d6e8c;
+
+  --sub-bg: #d8f0cb;
+  --sub-bg-deep: #bee4ac;
+  --sub-ink: #3c7a3f;
+
+  --mult-bg: #ffdfae;
+  --mult-bg-deep: #ffc877;
+  --mult-ink: #a85d13;
+
+  --success: #2f9e44;
+  --success-bg: #eaf7ec;
+  --error: #d6455d;
+  --error-bg: #fbeaec;
+
+  /* Theme-picker accent only — unrelated to the operation colors above,
+     so deliberately a different hue (pink) to avoid implying any
+     operation meaning. */
+  --flower-bg: #fbdce8;
+  --flower-ink: #b23a67;
+
+  --radius-device: 28px;
+  --radius-card: 18px;
+  --radius-pill: 999px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--cream-deep);
+  color: var(--ink);
+  font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
+}
+
+h1,
+h2,
+h3,
+.prompt,
+.tile,
+.slot-value,
+.table-chip {
+  font-family: 'Baloo 2', 'Atkinson Hyperlegible', system-ui, sans-serif;
+}
+
+button {
+  font-family: inherit;
+}
+
+/* The whole app renders as one bounded, rounded "device" sitting on a
+   quiet backdrop, rather than a page stretched edge-to-edge of the
+   browser — it should read as a single object a kid is using, not a
+   website. */
+
+.page-backdrop {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 28px 20px;
+}
+
+.app-device {
+  width: 100%;
+  max-width: 1040px;
+  /* Fill most of the viewport height (not just enough for the content)
+     so the device doesn't look like a small card stranded in a lot of
+     empty backdrop on a tall tablet-portrait or desktop window. */
+  min-height: calc(100vh - 56px);
+  display: flex;
+  background: var(--paper);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-device);
+  box-shadow: 0 18px 40px rgba(51, 43, 34, 0.1);
+  overflow: hidden;
+}
+
+.app-main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 28px;
+  background: var(--paper-wash);
+}
+
+/* Nav: a cream sidebar of chunky, tappable "buttons" rather than plain
+   text links — on a narrow (phone) screen it becomes a horizontal bar
+   pinned to the top instead of the bottom, so small hands resting on
+   the device's lower edge don't sit on top of the controls. */
+
+.side-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 168px;
+  flex-shrink: 0;
+  background: var(--cream);
+  border-right: 1px solid var(--border-soft);
+  padding: 20px 14px;
+}
+
+.nav-button {
+  padding: 14px 16px;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--cream-ink);
+  font-size: 15px;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+.nav-button:hover {
+  background: var(--cream-deep);
+}
+
+.nav-button.active {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* The Tables button is always about multiplication, so it always
+   carries the multiplication color — not only when selected. */
+.nav-button-mult {
+  background: var(--mult-bg);
+  color: var(--mult-ink);
+}
+
+.nav-button-mult:hover {
+  background: var(--mult-bg-deep);
+}
+
+.nav-button-mult.active {
+  background: var(--mult-bg-deep);
+  color: var(--ink);
+}
+
+@media (max-width: 700px) {
+  .page-backdrop {
+    padding: 0;
+  }
+
+  .app-device {
+    flex-direction: column;
+    max-width: none;
+    min-height: 100vh;
+    border-radius: 0;
+    border: none;
+  }
+
+  .side-nav {
+    flex-direction: row;
+    width: auto;
+    gap: 8px;
+    padding: 12px;
+    border-right: none;
+    border-bottom: 1px solid var(--border-soft);
+    overflow-x: auto;
+  }
+
+  .nav-button {
+    flex: 1;
+    text-align: center;
+    padding: 12px 10px;
+    white-space: nowrap;
+  }
+}
+
+/* Landing + name screens: shown before the main app (sidebar/tabs)
+   appears at all, inside the same bounded "device" shell for visual
+   consistency. */
+
+.landing-screen {
+  height: 100%;
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.landing-top,
+.landing-bottom {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.landing-title {
+  margin: 0;
+  font-size: 44px;
+  color: var(--ink);
+}
+
+.start-button {
+  font-size: 20px;
+  padding: 18px 44px;
+}
+
+.name-screen input {
+  margin-bottom: 14px;
+}
+
+.name-input {
+  width: 220px;
+  font-size: 22px;
+  font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
+  text-align: center;
+}
+
+.theme-prompt {
+  margin: 4px 0 10px;
+  color: var(--cream-ink);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.theme-picker {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+  justify-content: center;
+}
+
+.theme-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 14px;
+  border: 2px solid transparent;
+  border-radius: var(--radius-card);
+  background: var(--cream);
+  color: var(--cream-ink);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.theme-emoji {
+  font-size: 26px;
+}
+
+.theme-option.rockets {
+  background: var(--add-bg);
+  color: var(--add-ink);
+}
+
+.theme-option.flowers {
+  background: var(--flower-bg);
+  color: var(--flower-ink);
+}
+
+.theme-option.surprise {
+  background: var(--mult-bg);
+  color: var(--mult-ink);
+}
+
+.theme-option.active {
+  border-color: var(--ink);
+}
+
+.screen-centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 60vh;
+  gap: 8px;
+}
+
+.stage-label {
+  color: var(--cream-ink);
+  font-size: 14px;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+/* Question card: tinted by the CURRENT question's operation (a single
+   question always has exactly one operation, even in a mixed-practice
+   stage), so the color always means something true in the moment. */
+
+.question-card {
+  background: var(--paper);
+  border: 2px solid var(--border-soft);
+  border-radius: var(--radius-card);
+  padding: 32px 24px;
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.question-card.op-add {
+  background: var(--add-bg);
+  border-color: var(--add-bg-deep);
+}
+
+.question-card.op-sub {
+  background: var(--sub-bg);
+  border-color: var(--sub-bg-deep);
+}
+
+.question-card.op-mult {
+  background: var(--mult-bg);
+  border-color: var(--mult-bg-deep);
+}
+
+.prompt {
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.answer-input {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 28px;
+  text-align: center;
+  width: 140px;
+  padding: 8px;
+  border: 2px solid var(--border-soft);
+  border-radius: 12px;
+  margin-bottom: 12px;
+  display: block;
+  background: var(--paper);
+}
+
+.primary-button {
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 12px 28px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.feedback-correct {
+  color: var(--success);
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.feedback-incorrect {
+  color: var(--error);
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.progress-label {
+  color: var(--cream-ink);
+  font-size: 13px;
+  margin-top: 16px;
+  font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
+}
+
+/* Operation sub-menu: four buttons above the question card so he can
+   pick a single operation to drill, or the adaptive mix. Each button
+   carries its operation's color even when inactive (so the choices are
+   recognizable at a glance); the active one gets a solid-ink border to
+   stand out without breaking the color coding. "Mix" has no single
+   operation color, so it stays on the neutral ink/cream pairing used
+   elsewhere for selected states. */
+
+.op-submenu {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.op-filter-button {
+  padding: 10px 18px;
+  border: 2px solid transparent;
+  border-radius: var(--radius-pill);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  background: var(--cream);
+  color: var(--cream-ink);
+}
+
+.op-filter-button.op-add {
+  background: var(--add-bg);
+  color: var(--add-ink);
+}
+
+.op-filter-button.op-sub {
+  background: var(--sub-bg);
+  color: var(--sub-ink);
+}
+
+.op-filter-button.op-mult {
+  background: var(--mult-bg);
+  color: var(--mult-ink);
+}
+
+.op-filter-button.op-mix {
+  background: var(--cream-deep);
+  color: var(--cream-ink);
+}
+
+.op-filter-button.active {
+  border-color: var(--ink);
+}
+
+.op-filter-button.op-add.active {
+  background: var(--add-bg-deep);
+}
+
+.op-filter-button.op-sub.active {
+  background: var(--sub-bg-deep);
+}
+
+.op-filter-button.op-mult.active {
+  background: var(--mult-bg-deep);
+}
+
+.op-filter-button.op-mix.active {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.muted {
+  color: var(--cream-ink);
+}
+
+/* Resources */
+
+.tab-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.tab {
+  padding: 8px 18px;
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--border-soft);
+  background: var(--paper);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--cream-ink);
+  cursor: pointer;
+}
+
+.tab.active {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+.tables-grid-wrap {
+  overflow-x: auto;
+  border-radius: var(--radius-card);
+}
+
+.tables-grid {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 13px;
+}
+
+.tables-grid th,
+.tables-grid td {
+  border: 1px solid var(--border-soft);
+  padding: 7px 9px;
+  text-align: center;
+}
+
+.tables-grid-wrap.op-mult thead th,
+.tables-grid-wrap.op-mult tbody th {
+  background: var(--mult-bg);
+  color: var(--mult-ink);
+}
+
+.howto-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.howto-card {
+  background: var(--paper);
+  border: 2px solid var(--border-soft);
+  border-radius: var(--radius-card);
+  padding: 18px 20px;
+}
+
+.howto-card.op-add {
+  background: var(--add-bg);
+  border-color: var(--add-bg-deep);
+}
+
+.howto-card.op-sub {
+  background: var(--sub-bg);
+  border-color: var(--sub-bg-deep);
+}
+
+.howto-card.op-mult {
+  background: var(--mult-bg);
+  border-color: var(--mult-bg-deep);
+}
+
+.howto-card h3 {
+  margin-top: 0;
+  color: var(--ink);
+}
+
+.howto-card ul {
+  padding-left: 18px;
+}
+
+/* Table match (drag and drop) — always multiplication, so it always
+   carries the multiplication color. */
+
+.table-match-screen {
+  max-width: 480px;
+}
+
+.table-picker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.table-chip {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--mult-bg-deep);
+  background: var(--paper);
+  color: var(--mult-ink);
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.table-chip.active {
+  background: var(--mult-ink);
+  color: var(--paper);
+  border-color: var(--mult-ink);
+}
+
+.slots-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.slot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 2px dashed var(--mult-bg-deep);
+  border-radius: 12px;
+  padding: 8px 12px;
+  background: #fff8ee;
+  min-height: 48px;
+  touch-action: none;
+}
+
+.slot-label {
+  font-size: 14px;
+  color: var(--mult-ink);
+  font-weight: 700;
+}
+
+.slot-value {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+/* Correctness feedback stays on the universal success/error colors,
+   not the operation palette — a correct multiplication answer turning
+   "subtraction green" would send the wrong signal. */
+.slot-filled {
+  border-style: solid;
+  border-color: var(--error);
+  background: var(--error-bg);
+}
+
+.slot-correct {
+  border-style: solid;
+  border-color: var(--success);
+  background: var(--success-bg);
+}
+
+.tray {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  min-height: 56px;
+  padding: 12px;
+  border-radius: var(--radius-card);
+  background: var(--mult-bg);
+  margin-bottom: 12px;
+  touch-action: none;
+}
+
+.tile {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  border: none;
+  background: var(--mult-ink);
+  color: var(--paper);
+  font-size: 16px;
+  font-weight: 700;
+  touch-action: none;
+  cursor: grab;
+  /* Stop the browser's own text-selection/drag gesture from starting
+     alongside our custom drag — a desktop-mouse-only issue. */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+}
+
+.tile.dragging {
+  opacity: 0.85;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  cursor: grabbing;
+}
+
+.placed-tile {
+  width: 40px;
+  height: 36px;
+  font-size: 15px;
+}
+
+.table-match-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}

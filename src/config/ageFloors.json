@@ -1,0 +1,6 @@
+[
+  { "minAge": 0, "stageOrder": 1 },
+  { "minAge": 8, "stageOrder": 2 },
+  { "minAge": 10, "stageOrder": 3 },
+  { "minAge": 12, "stageOrder": 4 }
+]

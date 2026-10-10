@@ -1,0 +1,65 @@
+[
+  {
+    "id": "fluency_checkin",
+    "order": 1,
+    "title": "Fluency check-in",
+    "description": "Addition and subtraction within 20 — confirms the foundation and calibrates starting difficulty.",
+    "kind": "fact",
+    "refs": ["add_within_20", "sub_within_20"],
+    "unlockFraction": 0.5
+  },
+  {
+    "id": "add_sub_100_no_regroup",
+    "order": 2,
+    "title": "2-digit +/− (no regrouping)",
+    "description": "Numbers up to 100 that don't require carrying or borrowing.",
+    "kind": "skill",
+    "refs": ["add_2digit_no_regroup", "sub_2digit_no_regroup"],
+    "unlockFraction": 0.5
+  },
+  {
+    "id": "add_sub_100_regroup",
+    "order": 3,
+    "title": "2-digit +/− (with regrouping)",
+    "description": "The harder case — carrying and borrowing. This is where most of the real difficulty up to 100 lives.",
+    "kind": "skill",
+    "refs": ["add_2digit_regroup", "sub_2digit_regroup"],
+    "unlockFraction": 0.5
+  },
+  {
+    "id": "mult_grouping",
+    "order": 4,
+    "title": "Multiplication as grouping",
+    "description": "×1, ×2, ×10 — the easiest, most conceptual facts, framed as \"groups of\".",
+    "kind": "fact",
+    "refs": ["mult_groups_1_2_10"],
+    "unlockFraction": 0.85
+  },
+  {
+    "id": "mult_core",
+    "order": 5,
+    "title": "Core tables",
+    "description": "×3, ×4, ×5 — still friendly numbers, builds fact recall over counting.",
+    "kind": "fact",
+    "refs": ["mult_core_3_4_5"],
+    "unlockFraction": 0.85
+  },
+  {
+    "id": "mult_hard",
+    "order": 6,
+    "title": "Harder tables",
+    "description": "×6, ×7, ×8, ×9 — the facts kids actually struggle with. This stage should linger.",
+    "kind": "fact",
+    "refs": ["mult_hard_6_7_8_9"],
+    "unlockFraction": 0.9
+  },
+  {
+    "id": "mult_full",
+    "order": 7,
+    "title": "Full table fluency",
+    "description": "All of ×1–×10 mixed together, randomized, timed lightly.",
+    "kind": "fact",
+    "refs": ["mult_full_1_10"],
+    "unlockFraction": 0.9
+  }
+]

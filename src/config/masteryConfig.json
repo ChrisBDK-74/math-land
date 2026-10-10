@@ -1,0 +1,16 @@
+{
+  "correctFastDelta": 15,
+  "correctSlowDelta": 5,
+  "incorrectDelta": 20,
+  "masteredThreshold": 85,
+  "masteredSessionsRequired": 2,
+  "maxIntervalDays": 14,
+  "minIntervalDays": 1,
+  "responseTimeFastMs": 4000,
+  "sessionMix": {
+    "dueOrWeak": 0.5,
+    "stageNew": 0.3,
+    "masteredReview": 0.2
+  },
+  "sessionLength": 12
+}

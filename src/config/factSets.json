@@ -1,0 +1,44 @@
+[
+  {
+    "id": "add_within_20",
+    "label": "Addition within 20",
+    "op": "+",
+    "aRange": [1, 10],
+    "bRange": [1, 10]
+  },
+  {
+    "id": "sub_within_20",
+    "label": "Subtraction within 20",
+    "op": "-",
+    "aRange": [10, 20],
+    "bRange": [1, 10]
+  },
+  {
+    "id": "mult_groups_1_2_10",
+    "label": "× groups of 1, 2, 10",
+    "op": "×",
+    "aRange": [1, 10],
+    "bRange": [1, 2]
+  },
+  {
+    "id": "mult_core_3_4_5",
+    "label": "Core tables ×3, ×4, ×5",
+    "op": "×",
+    "aRange": [1, 10],
+    "bRange": [3, 5]
+  },
+  {
+    "id": "mult_hard_6_7_8_9",
+    "label": "Harder tables ×6–×9",
+    "op": "×",
+    "aRange": [1, 10],
+    "bRange": [6, 9]
+  },
+  {
+    "id": "mult_full_1_10",
+    "label": "Full tables ×1–×10",
+    "op": "×",
+    "aRange": [1, 10],
+    "bRange": [1, 10]
+  }
+]

@@ -1,0 +1,34 @@
+[
+  {
+    "id": "add_2digit_no_regroup",
+    "label": "2-digit + addition, no regrouping",
+    "op": "+",
+    "digitsA": 2,
+    "digitsB": 2,
+    "regroup": false
+  },
+  {
+    "id": "add_2digit_regroup",
+    "label": "2-digit + addition, with regrouping",
+    "op": "+",
+    "digitsA": 2,
+    "digitsB": 2,
+    "regroup": true
+  },
+  {
+    "id": "sub_2digit_no_regroup",
+    "label": "2-digit − subtraction, no borrowing",
+    "op": "-",
+    "digitsA": 2,
+    "digitsB": 2,
+    "regroup": false
+  },
+  {
+    "id": "sub_2digit_regroup",
+    "label": "2-digit − subtraction, with borrowing",
+    "op": "-",
+    "digitsA": 2,
+    "digitsB": 2,
+    "regroup": true
+  }
+]

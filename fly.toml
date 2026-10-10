@@ -1,0 +1,19 @@
+# Rename `app` to something unique on Fly.io before deploying — Christian's
+# other two apps already use their own names, so this needs a new one
+# (e.g. "christian-math-app"). `fly launch` will also offer to rename/create
+# it for you interactively if you'd rather let it pick.
+app = "math-app-change-me"
+primary_region = "nrt" # Tokyo — closest to Japan; change if you'd rather use whatever region your other apps are in
+
+[build]
+
+[http_service]
+  internal_port = 80
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"
